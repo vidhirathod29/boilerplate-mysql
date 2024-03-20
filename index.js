@@ -1,10 +1,10 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-require("./app/middleware/db");
+require('./app/middleware/db');
 
-const bodyParse = require("body-parser");
+const bodyParse = require('body-parser');
 
-require("dotenv").config();
+require('dotenv').config();
 app.use(express.json());
 app.use(bodyParse.json());
 app.use(express.urlencoded({ extended: true }));
