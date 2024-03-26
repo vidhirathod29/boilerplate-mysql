@@ -74,7 +74,8 @@ const registration = async (req, res, next) => {
                   RESPONSE_STATUS.ERROR,
                 ),
               );
-            } else {
+            }
+            if (result.length > 0) {
               next(
                 new GeneralResponse(
                   Messages.REGISTER_SUCCESS,
@@ -110,7 +111,6 @@ const login = async (req, res, next) => {
       [email],
       async function (error, result) {
         if (error) {
-          console.log('error-----', error);
           next(
             new GeneralError(
               `${Messages.SOMETHING_WENT_WRONG} while login`,
@@ -212,8 +212,6 @@ const viewProfile = async (req, res, next) => {
       },
     );
   } catch (error) {
-    // logger.error('Error:', error);
-    // console.log('original error',error.original());
     next(
       new GeneralError(
         Messages.SERVER_ERROR,
@@ -233,11 +231,10 @@ const updateUserData = async (req, res, next) => {
       .map(([key, value]) => `${key}='${value}'`)
       .join(', ');
 
-    sql = `UPDATE user SET ${setClause} WHERE email='${userEmail}'`;
+    const sql = `UPDATE user SET ${setClause} WHERE email='${userEmail}'`;
 
     connection.query(sql, [updateData, userEmail], (error, result) => {
       if (error) {
-        console.log(' Error:', error);
         next(
           new GeneralError(
             `User ${Messages.NOT_FOUND}`,
@@ -246,31 +243,28 @@ const updateUserData = async (req, res, next) => {
             RESPONSE_STATUS.ERROR,
           ),
         );
+      }
+      if (result.affectedRows > 0) {
+        next(
+          new GeneralError(
+            Messages.UPDATED_SUCCESS,
+            StatusCodes.OK,
+            undefined,
+            RESPONSE_STATUS.SUCCESS,
+          ),
+        );
       } else {
-        console.log(' Result:', result);
-        if (result.affectedRows > 0) {
-          next(
-            new GeneralError(
-              Messages.UPDATED_SUCCESS,
-              StatusCodes.OK,
-              undefined,
-              RESPONSE_STATUS.SUCCESS,
-            ),
-          );
-        } else {
-          next(
-            new GeneralError(
-              Messages.USER_NOT_FOUND,
-              StatusCodes.NOT_FOUND,
-              undefined,
-              RESPONSE_STATUS.ERROR,
-            ),
-          );
-        }
+        next(
+          new GeneralError(
+            Messages.USER_NOT_FOUND,
+            StatusCodes.NOT_FOUND,
+            undefined,
+            RESPONSE_STATUS.ERROR,
+          ),
+        );
       }
     });
   } catch (error) {
-    logger.error('Error:', error);
     next(
       new GeneralError(
         Messages.SERVER_ERROR,
