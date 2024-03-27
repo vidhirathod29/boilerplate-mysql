@@ -4,89 +4,6 @@ const { GeneralError } = require('../utils/error');
 const StatusCodes = require('../utils/Http-Status');
 const { Messages } = require('../utils/messages');
 const { RESPONSE_STATUS } = require('../utils/enum');
-const { error } = require('console');
-
-// const addTestimonial = async (req, res, next) => {
-//   try {
-//     const { name, designation, description } = req.body;
-
-//     const sql = `SELECT * FROM testimonial WHERE name = ?`;
-
-//     connection.query(sql, [name],(err, result) => {
-//       if (err) {
-//         console.log('error',err)
-//         next(
-//           new GeneralError(
-//             Messages.NOT_FOUND,
-//             StatusCodes.NOT_FOUND,
-//             undefined,
-//             RESPONSE_STATUS.ERROR,
-//           ),
-//         );
-//       }
-//       if (result.length > 0) {
-//         console.log('result',result);
-//         next(
-//           new GeneralError(
-//             `Testimonial ${Messages.ALREADY_EXIST}`,
-//             StatusCodes.ALREADY_EXIST,
-//             undefined,
-//             RESPONSE_STATUS.ERROR,
-//           ),
-//         );
-//       } else {
-//         if (!req.file) {
-//           next(
-//             new GeneralError(
-//               Messages.IMAGE_NOT_FOUND,
-//               StatusCodes.NOT_FOUND,
-//               undefined,
-//               RESPONSE_STATUS.ERROR,
-//             ),
-//           );
-//         }
-//         if (req.file) {
-//           const image = req.file.filename;
-
-//           const insert = `INSERT INTO testimonial(name,designation,description,image) VALUES('${name}','${designation}'
-//               ,'${description}','${image}')`;
-
-//           connection.query(insert, (err, result) => {
-//             if (err) {
-//               next(
-//                 new GeneralError(
-//                   Messages.SOMETHING_WENT_WRONG,
-//                   StatusCodes.SOMETHING_WENT_WRONG,
-//                   undefined,
-//                   RESPONSE_STATUS.ERROR,
-//                 ),
-//               );
-//             }
-//             if (result) {
-//               next(
-//                 new GeneralError(
-//                   `Testimonial ${Messages.ADD_SUCCESS}`,
-//                   StatusCodes.OK,
-//                   undefined,
-//                   RESPONSE_STATUS.SUCCESS,
-//                 ),
-//               );
-//             }
-//           });
-//         }
-//       }
-//     });
-//   } catch (error) {
-//     next(
-//       new GeneralError(
-//         Messages.SERVER_ERROR,
-//         StatusCodes.INTERNAL_SERVER_ERROR,
-//         undefined,
-//         RESPONSE_STATUS.ERROR,
-//       ),
-//     );
-//   }
-// };
 const addTestimonial = async (req, res, next) => {
   try {
     const { name, designation, description } = req.body;
@@ -117,7 +34,6 @@ const addTestimonial = async (req, res, next) => {
       const sql = `INSERT INTO testimonial (name, designation, description, image) VALUES ('${name}','${designation}','${description}','${image}')`;
       connection.query(sql, (error, result) => {
         if (error) {
-          console.log('error', error);
           next(
             new GeneralError(
               Messages.SOMETHING_WENT_WRONG,
