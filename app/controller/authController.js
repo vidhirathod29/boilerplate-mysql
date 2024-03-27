@@ -110,7 +110,6 @@ const login = async (req, res, next) => {
       [email],
       async function (error, result) {
         if (error) {
-          console.log('error-----', error);
           next(
             new GeneralError(
               `${Messages.SOMETHING_WENT_WRONG} while login`,
@@ -212,8 +211,6 @@ const viewProfile = async (req, res, next) => {
       },
     );
   } catch (error) {
-    // logger.error('Error:', error);
-    // console.log('original error',error.original());
     next(
       new GeneralError(
         Messages.SERVER_ERROR,
@@ -237,7 +234,6 @@ const updateUserData = async (req, res, next) => {
 
     connection.query(sql, [updateData, userEmail], (error, result) => {
       if (error) {
-        console.log(' Error:', error);
         next(
           new GeneralError(
             `User ${Messages.NOT_FOUND}`,
@@ -247,7 +243,6 @@ const updateUserData = async (req, res, next) => {
           ),
         );
       } else {
-        console.log(' Result:', result);
         if (result.affectedRows > 0) {
           next(
             new GeneralError(
