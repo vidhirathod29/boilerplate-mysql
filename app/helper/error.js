@@ -8,10 +8,10 @@ const handleErrors = (err, req, res, next) => {
     return res
       .status(err.statusCode !== '' ? err.statusCode : err.getCode())
       .json({
-        status: err.status,
-        code: err.statusCode !== '' ? err.statusCode : err.getCode(),
         message: err.message,
+        code: err.statusCode !== '' ? err.statusCode : err.getCode(),
         result: err.result !== '' ? err.data : undefined,
+        status: err.status,
       });
   }
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -47,5 +47,20 @@ const handleJoiErrors = (err, req, res, next) => {
     next(err);
   }
 };
-
-module.exports = { handleErrors, handleJoiErrors };
+const errorHandler = (check) => {
+  return async (req, res, next) => {
+    try {
+      await check(req, res, next);
+    } catch (error) {
+      next(
+        new GeneralError(
+          Messages.SERVER_ERROR,
+          StatusCodes.INTERNAL_SERVER_ERROR,
+          undefined,
+          RESPONSE_STATUS.ERROR,
+        ),
+      );
+    }
+  };
+};
+module.exports = { handleErrors, handleJoiErrors, errorHandler };
