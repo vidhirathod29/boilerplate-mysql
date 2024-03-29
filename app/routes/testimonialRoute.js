@@ -5,13 +5,13 @@ const validate = require('../validation/testimonialValidation');
 const { validator } = require('../middleware/validator');
 const { authentication } = require('../middleware/authenticate');
 const upload = require('../middleware/multer');
-
+const { errorHandler } = require('../helper/error');
 router.post(
   '/addTestimonial',
   upload.single('image'),
   authentication,
   validator.body(validate.testimonial),
-  controller.addTestimonial,
+  errorHandler(controller.addTestimonial),
 );
 router.get('/viewTestimonial/:id', authentication, controller.viewTestimonial);
 router.put(
@@ -19,16 +19,16 @@ router.put(
   upload.single('image'),
   authentication,
   validator.body(validate.updateTestimonial),
-  controller.updateTestimonial,
+  errorHandler(controller.updateTestimonial),
 );
 router.delete(
   '/deleteTestimonial/:id',
   authentication,
-  controller.deleteTestimonial,
+  errorHandler(controller.deleteTestimonial),
 );
 router.delete(
   '/deleteMultipleTestimonial',
   authentication,
-  controller.deleteMultipleTestimonial,
+  errorHandler(controller.deleteMultipleTestimonial),
 );
 module.exports = router;
