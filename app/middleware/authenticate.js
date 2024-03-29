@@ -6,7 +6,6 @@ const { RESPONSE_STATUS } = require('../utils/enum');
 const { Messages } = require('../utils/messages');
 
 const generateToken = (req) => {
-  console.log('req', req);
   const token = jwt.sign(
     { email: req.email, password: req.password },
     process.env.PRIVATE_KEY,

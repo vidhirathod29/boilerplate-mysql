@@ -5,43 +5,44 @@ const controller = require('../controller/authController');
 const validate = require('../validation/authValidation');
 const { validator } = require('../middleware/validator');
 const { authentication } = require('../middleware/authenticate');
+const { errorHandler } = require('../helper/error');
 
 router.post(
   '/registration',
   upload.single('image'),
   validator.body(validate.register),
-  controller.registration,
+  errorHandler(controller.registration),
 );
-router.post('/login', validator.body(validate.login), controller.login);
-router.get('/viewProfile', authentication, controller.viewProfile);
+router.post('/login', validator.body(validate.login), errorHandler(controller.login));
+router.get('/viewProfile', authentication, errorHandler(controller.viewProfile));
 router.put(
   '/updateProfile',
   upload.single('image'),
   authentication,
   validator.body(validate.update),
-  controller.updateUserData,
+  errorHandler(controller.updateUserData),
 );
 router.put(
   '/resetPassword',
   authentication,
   validator.body(validate.resetPassword),
-  controller.resetPassword,
+  errorHandler(controller.resetPassword),
 );
 router.post(
   '/verifyEmail',
   validator.body(validate.verifyEmail),
-  controller.verifyEmail,
+  errorHandler(controller.verifyEmail),
 );
 
 router.post(
   '/verifyOtp',
   validator.body(validate.verifyOtp),
-  controller.verifyOtp,
+  errorHandler(controller.verifyOtp),
 );
 router.put(
   '/updatePassword',
   validator.body(validate.updatePassword),
-  controller.updatePassword,
+  errorHandler(controller.updatePassword),
 );
 
 module.exports = router;
